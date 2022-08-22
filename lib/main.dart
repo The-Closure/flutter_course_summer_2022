@@ -1,7 +1,12 @@
 void main() {
-  print('new line with print statement');
   print('hello world');
   Person p = Person();
+  p.directParamsMethod(1, 1);
+  p.positionalParamsMethod(3, 32);
+  p.positionalParamsMethod(3);
+  p.namedParamsMethod(1, c: 2);
+  p.namedParamsMethod(1, c: 2, b: 1);
+
   p.test();
 }
 
@@ -17,8 +22,23 @@ class Person {
   void test() {
     point = Point();
     point = 2;
+    name = 2;
     name = 'name';
     // number = 'str'; // will throw an exception
+  }
+
+  void directParamsMethod(int? a, int? b) {
+    if (a != null && b != null) {
+      print('a + b = ${a + b}');
+    }
+  }
+
+  void positionalParamsMethod(int a, [int? b]) {
+    if (b != null) print('a + b = ${a + b}');
+  }
+
+  void namedParamsMethod(int a, {int b = 0, required int c}) {
+    print('a + b = ${a + b}');
   }
 }
 
