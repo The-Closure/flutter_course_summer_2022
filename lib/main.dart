@@ -1,4 +1,5 @@
 void main() {
+  print('new line with print statement');
   print('hello world');
   Person p = Person();
   p.test();
@@ -16,7 +17,6 @@ class Person {
   void test() {
     point = Point();
     point = 2;
-    name = 2;
     name = 'name';
     // number = 'str'; // will throw an exception
   }
