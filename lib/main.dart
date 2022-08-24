@@ -1,8 +1,10 @@
 void main() {
-  List<dynamic> alpha = [0, 'test'];
+  List<String> alpha = ['dart', 'test'];
   alpha.add('a');
-  alpha.add(2);
-  alpha.addAll([3, 'b', 4, 'c']);
+  alpha.add('two');
+  alpha.addAll(['three', 'b', 'four', 'c']);
+
+  alpha.sort();
 
   Map<String, dynamic> beta = {'key2': 1, 'key3': 'value3'};
   beta['key1'] = 'value1';
