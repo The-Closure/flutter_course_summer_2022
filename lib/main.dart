@@ -54,3 +54,49 @@ void main() {
 
   print('exit 0 code ');
 }
+
+class Person {
+  String? firstName;
+  String? lastName;
+  String? location;
+  int? age;
+  Person();
+  Person.fromMap({required Map<String, dynamic> data}) {
+    firstName = data['firstName'];
+    lastName = data['lastName'];
+    location = data['location'];
+    age = data['age'];
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['location'] = location;
+    data['age'] = age;
+    return data;
+  }
+}
+
+class Mobile {
+  Person? owner;
+  String? sn;
+  int? imei;
+  String? msisdn;
+  Mobile();
+  Mobile.fromMap({required Map<String, dynamic> data}) {
+    sn = data['sn'];
+    imei = data['imei'];
+    msisdn = data['msisdn'];
+    owner = Person.fromMap(data: data['owner']);
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    data['sn'] = sn;
+    data['imei'] = imei;
+    data['msisdn'] = msisdn;
+    data['owner'] = owner?.toMap();
+    return data;
+  }
+}
