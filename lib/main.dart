@@ -9,7 +9,7 @@ void main() async {
       print(value);
     },
   );
-  print('TEST FIRST CALL ${await result}');
+  print('TEST FIRST CALL');
   int directResult = await dc.findDiff(langsList);
 
   print('FINAL COLLECT');
