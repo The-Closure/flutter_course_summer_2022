@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_course_summer_2022/first_page.dart';
 import 'package:flutter_course_summer_2022/second_page.dart';
+import 'package:flutter_course_summer_2022/third_page.dart';
 import 'package:lorem_gen/lorem_gen.dart';
 
 void main() {
@@ -15,11 +16,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SecondPage(
-        article: Lorem.word(
-          numWords: Random().nextInt(1000),
-        ),
-      ),
+      // home: SecondPage(
+      //   article: Lorem.word(
+      //     numWords: Random().nextInt(1000),
+      //   ),
+      // ),
+
+      home: ThirdPage(),
     );
   }
 }
