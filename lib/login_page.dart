@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
   final TextEditingController phone = TextEditingController();
@@ -20,26 +21,32 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
+            const Spacer(),
             Container(
-              child: FlutterLogo(
+              child: const FlutterLogo(
                 size: 48,
               ),
               alignment: Alignment.center,
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: TextFormField(
                 validator: (phone) {
-                  if ((phone?.length ?? 0) < 8)
-                    return 'please enter a phone number';
-                  return null;
+                  phone = "+44" + (phone ?? "");
+                  String pattern =
+                      r'^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$';
+                  RegExp regExp = new RegExp(pattern);
+                  if (regExp.hasMatch(phone)) {
+                    return null;
+                  } else {
+                    return "phone number is not correct";
+                  }
                 },
                 controller: phone,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  prefix: Text('+44 '),
+                decoration: const InputDecoration(
+                  prefix: Text('+44'),
                   border: OutlineInputBorder(),
                   hintText: 'Phone Number',
                 ),
@@ -49,18 +56,24 @@ class LoginPage extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: TextFormField(
                 validator: (password) {
-                  if ((password?.length ?? 0) < 3)
-                    return 'please enter a password';
-                  return null;
+                  String pattern =
+                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                  RegExp regExp = new RegExp(pattern);
+                  if (regExp.hasMatch(password ?? "")) {
+                    return null;
+                  } else {
+                    return "password should be at least 8 characters and special character and number";
+                  }
                 },
                 controller: password,
                 obscureText: true,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    errorMaxLines: 3,
+                    border: const OutlineInputBorder(),
                     hintText: 'Passowrd',
                     suffixIcon: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.remove_red_eye,
                       ),
                       onPressed: () {},
@@ -70,7 +83,7 @@ class LoginPage extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width / 2,
               child: ElevatedButton.icon(
-                style: ButtonStyle(),
+                style: const ButtonStyle(),
                 onPressed: () {
                   if (isValid()) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
@@ -79,24 +92,24 @@ class LoginPage extends StatelessWidget {
                     );
                   }
                 },
-                label: Text('sign in'),
-                icon: Icon(Icons.person),
+                label: const Text('sign in'),
+                icon: const Icon(Icons.person),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Didn\'t have Account yet ?'),
+                const Text('Didn\'t have Account yet ?'),
                 TextButton(
                   onPressed: () {},
-                  child: Text('sign up'),
+                  child: const Text('sign up'),
                 ),
               ],
             ),
-            Spacer(),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
+            const Spacer(),
+            const Spacer(),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 16.0),
               child: Text(
                 'poweredBy The-Closure',
                 style: TextStyle(fontSize: 8),
