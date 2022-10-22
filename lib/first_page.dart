@@ -71,8 +71,12 @@ class _FirstPageState extends State<FirstPage> {
               ),
               currentAccountPictureSize: Size(75, 75),
               decoration: BoxDecoration(
-                  image:
-                      DecorationImage(image: AssetImage('assets/nature.jpeg'))),
+                image: DecorationImage(
+                    image: AssetImage(
+                      'assets/nature.jpeg',
+                    ),
+                    fit: BoxFit.fill),
+              ),
             ),
             ListTile(
               leading: Icon(Icons.message),
