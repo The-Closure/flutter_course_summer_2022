@@ -1,7 +1,25 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-void main() {
-  runApp(const MyApp());
+import 'package:flutter/material.dart';
+import 'package:flutter_course_summer_2022/consts.dart';
+import 'package:flutter_course_summer_2022/model/user_model.dart';
+import 'package:flutter_course_summer_2022/service/auth_service.dart';
+import 'package:http/http.dart' as http;
+
+void main() async {
+  final authServiceImpl = AuthServiceImpl(client: http.Client());
+
+  try {
+    UserModel result = await authServiceImpl.register(
+      userModel: UserModel.fromJson(
+        registerUserModel,
+      ),
+    );
+    print(jsonEncode(result.toJson()));
+  } catch (e) {
+    print(e.toString());
+  }
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
