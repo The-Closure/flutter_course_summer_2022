@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_course_summer_2022/consts.dart';
 import 'package:flutter_course_summer_2022/model/user_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,8 +10,8 @@ abstract class AuthService {
 
   Future<UserModel> register({required UserModel userModel});
   Future<void> signIn();
-  Future<void> logout();
-  Future<void> resetPassword();
+  Future<void> initResetPassword(String mail);
+  Future<void> deleteBrandById(int id);
 }
 
 class AuthServiceImpl extends AuthService {
@@ -20,14 +21,15 @@ class AuthServiceImpl extends AuthService {
   Future<UserModel> register({required UserModel userModel}) async {
     http.Response response = await client.post(
       Uri.parse(
-        'http://192.168.68.41:8082/api/admin/users',
+        'http://192.168.27.41:8080/api/admin/users',
       ),
       body: jsonEncode(userModel.toJson()),
       headers: {
         'Content-Type': 'application/json',
         'Accept': '*/*',
+        'Authorization': "Bearer $TOKEN"
       },
-    );
+    ).timeout(Duration(seconds: 10));
 
     if (response.statusCode == 201) {
       return UserModel.fromJson(jsonDecode(response.body));
@@ -37,17 +39,39 @@ class AuthServiceImpl extends AuthService {
   }
 
   @override
-  Future<void> logout() {
-    throw UnimplementedError();
-  }
+  Future<void> initResetPassword(String mail) async {
+    http.Response response = await client.post(
+        Uri.parse(
+          'http://192.168.27.41:8080/api/account/reset-password/init',
+        ),
+        headers: {
+          'Content-Type': 'application/text',
+          'Accept': '*/*',
+          'Authorization': 'Bearer $TOKEN'
+        },
+        body: mail);
 
-  @override
-  Future<void> resetPassword() {
-    throw UnimplementedError();
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(response.body);
+    }
   }
 
   @override
   Future<void> signIn() {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteBrandById(int id) async {
+    http.Response response = await client.delete(
+        Uri.parse('http://192.168.27.41:8080/api/brands/$id'),
+        headers: {'Authorization': 'Bearer $TOKEN'});
+    if (response.statusCode == 204) {
+      return;
+    } else {
+      throw Exception(response.body);
+    }
   }
 }
