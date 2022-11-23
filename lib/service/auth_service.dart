@@ -21,7 +21,7 @@ class AuthServiceImpl extends AuthService {
   Future<UserModel> register({required UserModel userModel}) async {
     http.Response response = await client.post(
       Uri.parse(
-        'http://192.168.27.41:8080/api/admin/users',
+        'http://aws-us01.my-app-course.com/api/admin/users',
       ),
       body: jsonEncode(userModel.toJson()),
       headers: {
@@ -29,7 +29,7 @@ class AuthServiceImpl extends AuthService {
         'Accept': '*/*',
         'Authorization': "Bearer $TOKEN"
       },
-    ).timeout(Duration(seconds: 10));
+    ).timeout(Duration(seconds: 1));
 
     if (response.statusCode == 201) {
       return UserModel.fromJson(jsonDecode(response.body));
@@ -42,7 +42,7 @@ class AuthServiceImpl extends AuthService {
   Future<void> initResetPassword(String mail) async {
     http.Response response = await client.post(
         Uri.parse(
-          'http://192.168.27.41:8080/api/account/reset-password/init',
+          'http://aws-us01.my-app-course.com/api/account/reset-password/init',
         ),
         headers: {
           'Content-Type': 'application/text',
@@ -66,7 +66,7 @@ class AuthServiceImpl extends AuthService {
   @override
   Future<void> deleteBrandById(int id) async {
     http.Response response = await client.delete(
-        Uri.parse('http://192.168.27.41:8080/api/brands/$id'),
+        Uri.parse('http://aws-us01.my-app-course.com/api/brands/$id'),
         headers: {'Authorization': 'Bearer $TOKEN'});
     if (response.statusCode == 204) {
       return;

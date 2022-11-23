@@ -41,7 +41,9 @@ class UserModel {
     createdDate = json['createdDate'];
     lastModifiedBy = json['lastModifiedBy'];
     lastModifiedDate = json['lastModifiedDate'];
-    authorities = (json['authorities'] ?? <String>[]) as List<String>;
+    authorities = ((json['authorities'] ?? <dynamic>[]) as List<dynamic>)
+        .map((e) => e.toString())
+        .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -58,7 +60,7 @@ class UserModel {
     data['createdDate'] = this.createdDate;
     data['lastModifiedBy'] = this.lastModifiedBy;
     data['lastModifiedDate'] = this.lastModifiedDate;
-    data['authorities'] = this.authorities ?? '[]';
+    data['authorities'] = this.authorities;
     return data;
   }
 }

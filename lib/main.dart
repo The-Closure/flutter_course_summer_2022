@@ -7,34 +7,7 @@ import 'package:flutter_course_summer_2022/service/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 void main() async {
-  print('test');
-  final authServiceImpl = AuthServiceImpl(client: http.Client());
-
-  try {
-    UserModel result = await authServiceImpl.register(
-      userModel: UserModel.fromJson(
-        registerUserModel,
-      ),
-    );
-    print(jsonEncode(result.toJson()));
-  } catch (e) {
-    print(e.toString());
-  }
-
-  try {
-    authServiceImpl.initResetPassword('admin@localhost');
-  } catch (e) {
-    print(e.toString());
-  }
-
-  try {
-    for (var i = 3; i < 10; i++) {
-      authServiceImpl.deleteBrandById(i);
-    }
-  } catch (e) {
-    print(e.toString());
-  }
-  // runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
