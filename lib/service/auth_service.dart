@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_course_summer_2022/consts.dart';
 import 'package:flutter_course_summer_2022/model/user_model.dart';
@@ -34,7 +35,7 @@ class AuthServiceImpl extends AuthService {
     if (response.statusCode == 201) {
       return UserModel.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception(jsonDecode(response.body)['title']);
+      throw HttpException(jsonDecode(response.body)['title']);
     }
   }
 

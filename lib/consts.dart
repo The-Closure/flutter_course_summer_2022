@@ -6,7 +6,7 @@ final registerUserModel = {
   "imageUrl": "string",
   "activated": true,
   "langKey": "en",
-  "createdBy": "string",
+  "createdBy": "now",
   "createdDate": "2022-11-12T15:51:12.152Z",
   "lastModifiedBy": "string",
   "lastModifiedDate": "2022-11-12T15:51:12.152Z",
