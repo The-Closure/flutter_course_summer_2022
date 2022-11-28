@@ -19,9 +19,12 @@ class RandBloc extends Bloc<RandEvent, RandState> {
         emit(RandGenerated(value: value));
       });
       while (!done) {
-        emit(GeneratingRand(loadPercentage: (prec + 10)));
-        if (prec == 70) done = true;
-        await Future.delayed(Duration(milliseconds: 100));
+        emit(GeneratingRand(loadPercentage: (prec += 20)));
+        if (prec == 70) {
+          emit(GeneratingRand(loadPercentage: 100));
+          done = true;
+        }
+        await Future.delayed(Duration(milliseconds: 500));
       }
     });
   }
