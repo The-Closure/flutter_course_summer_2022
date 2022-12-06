@@ -10,7 +10,7 @@ abstract class AuthService {
   AuthService({required this.client});
 
   Future<UserModel> register({required UserModel userModel});
-  Future<void> signIn();
+  Future<String> signIn(String username, String password);
   Future<void> initResetPassword(String mail);
   Future<void> deleteBrandById(int id);
 }
@@ -60,14 +60,29 @@ class AuthServiceImpl extends AuthService {
   }
 
   @override
-  Future<void> signIn() {
-    throw UnimplementedError();
+  Future<String> signIn(String username, String password) async {
+    http.Response response = await client.post(
+        Uri.parse(
+          'http://172.16.40.113:8082/api/authenticate',
+        ),
+        headers: {'Content-Type': 'application/json', 'Accept': '*/*'},
+        body: jsonEncode(
+            {"username": username, "password": password, "rememberMe": true}));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['id_token'];
+    } else if (response.statusCode == 401) {
+      throw HttpException(jsonDecode(response.body)['detail']);
+    } else if(response.statusCode == 400){
+      return jsonDecode(response.body)['title'];
+    }else {
+      throw Exception('failed request');
+    }
   }
 
   @override
   Future<void> deleteBrandById(int id) async {
     http.Response response = await client.delete(
-        Uri.parse('http://aws-us01.my-app-course.com/api/brands/$id'),
+        Uri.parse('http://172.16.40.113:8/api/brands/$id'),
         headers: {'Authorization': 'Bearer $TOKEN'});
     if (response.statusCode == 204) {
       return;

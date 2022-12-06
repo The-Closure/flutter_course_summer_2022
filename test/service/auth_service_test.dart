@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_course_summer_2022/bloc/auth_bloc.dart';
 import 'package:flutter_course_summer_2022/model/user_model.dart';
 import 'package:flutter_course_summer_2022/service/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -52,8 +54,16 @@ void main() {
             await authService.register(userModel: badUserModel ?? UserModel()),
         throwsA(isA<HttpException>()));
   });
-  test('first3 simple unit test', () {});
-  test('first4 simple unit test', () {});
-  test('first5 simple unit test', () {});
-  test('first6 simple unit test', () {});
+  test('valid sign in', () async {
+    expect(await authService.signIn('admin', 'admin'), isA<String>());
+  });
+  test('invalid sign in', () {
+    expect(() async => await authService.signIn('admin', 'user'),
+        throwsA(isA<HttpException>()));
+  });
+  test('server error sign in', () {
+    expect(() async => await authService.signIn('admin', 'admin'),
+        throwsA(isA<Exception>()));
+  });
+  
 }
