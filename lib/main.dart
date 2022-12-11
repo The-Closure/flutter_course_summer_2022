@@ -1,6 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FirebaseApp firebaseApp = await Firebase.initializeApp();
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  print(fcmToken);
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runApp(const MyApp());
 }
 
