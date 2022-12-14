@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -61,16 +66,59 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  List users = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  void fetchUsers() {
+    FirebaseFirestore.instance.collection("users").get().then((value) {
+      for (var u in value.docs) {
+        users.add(u.data());
+      }
+      if (users.isNotEmpty) {
+        setState(() {
+          users = users;
+        });
+      }
     });
+  }
+
+  Future<void> _saveNewDoc() async {
+    // Create a storage reference from our app
+    final storageRef = FirebaseStorage.instance.ref();
+
+// Create a reference to "mountains.jpg"
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      final mountainsRef = storageRef.child(result.files.single.name);
+      File file = File(result.files.single.path ?? '');
+      try {
+        String url =
+            await (await mountainsRef.putFile(file)).ref.getDownloadURL();
+        final user = <String, dynamic>{
+          "first": "Alan",
+          "middle": "Mathison",
+          "last": "Turing",
+          "img": url,
+          "born": 1912
+        };
+
+        final db = FirebaseFirestore.instance;
+        db
+            .collection("users")
+            .add(user)
+            .then((value) => print('doc id is : ${value.id}'));
+        setState(() {});
+      } catch (e) {
+        print('----------------${e}');
+      }
+    } else {
+      // User canceled the picker
+    }
   }
 
   @override
@@ -83,6 +131,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                users.clear();
+                fetchUsers();
+              },
+              icon: Icon(Icons.refresh))
+        ],
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -90,35 +146,32 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        child: ListView.builder(
+          itemCount: users.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              child: Container(
+                  child: ListTile(
+                leading: users[index].keys.contains('img')
+                    ? Image.network(
+                        users[index]['img'],
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.fill,
+                        errorBuilder: (context, error, stackTrace) {
+                          return FlutterLogo();
+                        },
+                      )
+                    : FlutterLogo(),
+                title: Text(users[index]['first']),
+                subtitle: Text(users[index]['last']),
+              )),
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _saveNewDoc,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
