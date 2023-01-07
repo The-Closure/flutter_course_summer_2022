@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_course_summer_2022/constants.dart';
 import 'package:flutter_course_summer_2022/contact_card.dart';
+import 'package:flutter_course_summer_2022/main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class whatsappHomePage extends StatelessWidget {
-  const whatsappHomePage({Key? key}) : super(key: key);
-
+  whatsappHomePage({Key? key}) : super(key: key);
+  bool lang = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'WhatsApp',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context)!.whatsapp,
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: const [
-          Padding(
+        actions: [
+          const Padding(
             padding: EdgeInsets.all(12.0),
             child: Icon(
               Icons.search,
@@ -25,11 +27,20 @@ class whatsappHomePage extends StatelessWidget {
               size: 28,
             ),
           ),
-          Icon(
+          const Icon(
             Icons.more_vert,
             color: Colors.white,
             size: 28,
-          )
+          ),
+          IconButton(
+              onPressed: () {
+                lang = !lang;
+                lang
+                    ? MyApp.of(context)!.setLocale(const Locale('en'))
+                    : MyApp.of(context)!.setLocale(const Locale('ar'));
+                  
+              },
+              icon: const Icon(Icons.language))
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
@@ -38,39 +49,39 @@ class whatsappHomePage extends StatelessWidget {
             alignment: Alignment.center,
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
-                Padding(padding: EdgeInsets.only(right: 8)),
-                Icon(
+              children: [
+                const Padding(padding: EdgeInsets.only(right: 8)),
+                const Icon(
                   Icons.camera_alt,
                   color: Colors.white,
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
-                  'CHATS',
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.chat,
+                  style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 16),
                 ),
-                Spacer(),
-                Spacer(),
+                const Spacer(),
+                const Spacer(),
                 Text(
-                  'STATUS',
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.status,
+                  style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 16),
                 ),
-                Spacer(),
-                Spacer(),
+                const Spacer(),
+                const Spacer(),
                 Text(
-                  'CALLS',
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.call,
+                  style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 16),
                 ),
-                Spacer(),
+                const Spacer(),
               ],
             ),
           ),
@@ -82,18 +93,18 @@ class whatsappHomePage extends StatelessWidget {
               contact: 'Flutter bn Dart',
               unreadMessaged: 0,
               image: imageUrl,
-              date: '6:42 PM',
+              date: '6:42 pm}',
               message: 'hello flutter can I ask you ?'),
           ContactCard(
               contact: 'Flutter bn Dart',
               unreadMessaged: 3,
               image: imageUrl,
-              date: '6:42 PM',
+              date: '6:42 PM}',
               message: 'hello flutter can I ask you ?'),
           ContactCard(
               contact: 'Flutter bn Dart',
               unreadMessaged: 3,
-              date: '6:42 PM',
+              date: '6:42 PM}',
               message: 'hello flutter can I ask you ?'),
           ContactCard(
               contact: 'Flutter bn Dart',
